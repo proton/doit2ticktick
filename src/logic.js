@@ -173,13 +173,29 @@ export default class GrabberLogic {
 			const task = {};
 			task.content = doitTask.title;
 			task.project_id = projectMap[doitTask.project] || inboxProjectId;
-			// section_id
-			// parent_id
-			// order
-			// label_ids
+			task.label_ids = [];
+			let boxName;
+			if (doitTask.attribute == 'next') boxName = nextBoxName;
+			else if (doitTask.attribute == 'waiting') boxName = waitingBoxName;
+			else if (doitTask.attribute == 'noplan') boxName = somedayBoxName;
+			if (boxName) {
+				task.section_id = todoistSections.find(s => s.name == boxName && s.project_id == task.project_id);
+				const label_id = todoistLabels.find(l => l.name.includes(boxName));
+				task.label_ids = [label_id];
+			}
+			if (doitTask.context) {
+				const label_id = contextMap[doitTask.context];
+				task.label_ids.push(label_id);
+			}
+			if (doitTask.tags) {
+				const label_ids = doitTask.tags.map(t => tagsMap[t]);
+				task.label_ids = task.label_ids.concat(label_ids);
+			}
 			task.priority = doitTask.priority + 1;
+
 			// due_date
 			// due_datetime
+
 			console.log(task);
 
 			// {
@@ -187,9 +203,6 @@ export default class GrabberLogic {
 			// 	all_day: true,
 			// 	start_at: 0,
 			// 	end_at: 0,
-			// 	context: 'f79e834c-39be-491c-870f-0f7fdcdf4081',
-			// 	tags: [ 'Gestalt' ],
-			// 	pos: 2247838059,
 			// }
 
 			// + note!!!

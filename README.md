@@ -8,5 +8,6 @@ npm start
 ```
 ## Non-interactive usage (like for cronjob backup)
 ```
-npm start -- --login=<your login> --password=<your password> --output=<path to output file>
+npm start -- --login=<your login> --password=<your password> --todoistToken=<your todoist token>
 ```
+You can find your todoist token on this page: https://todoist.com/prefs/integrations

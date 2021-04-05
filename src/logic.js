@@ -148,7 +148,7 @@ export default class GrabberLogic {
 			if (!project) throw `project with name "${doitContext.name}" not found`;
 			projectMap[doitProject.uuid] = project.id;
 		}
-		const inboxProjectId = todoistProjects.find(p => p.name === "Inbox");
+		const inboxProjectId = todoistProjects.find(p => p.name === "Inbox").id;
 
 		const contextMap = {};
 		for (const doitContext of doitContexts) {
@@ -206,9 +206,6 @@ export default class GrabberLogic {
 			// }
 
 			// + note!!!
-		
-			// const t = await todoistApi.items.add({ content: 'delete me plz' })
-			// console.log(t);
 		}
 
 		await todoistApi.commit();

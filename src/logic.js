@@ -33,7 +33,6 @@ export default class GrabberLogic {
 		const todoistProjectNames = todoistProjects.map(project => project.name);
 		
 		const missingProjectNames = [...new Set(doitProjectNames.filter(name => !todoistProjectNames.includes(name)))];
-		console.log(missingProjectNames);
 
 		for (const name of missingProjectNames) {
 			await todoistApi.projects.add({ name: name });
@@ -47,15 +46,26 @@ export default class GrabberLogic {
 
 		const contextNames = [nextContextName, somedayContextName, waitingContextName];
 
+		// add labels
 		const todoistLabels = todoistApi.labels.get();
 		for (const name of contextNames) {
-			const label = todoistLabels.filter(filter => filter.name.includes(name))[0];
+			const label = todoistLabels.find(l => l.name.includes(name));
 			if (!label) {
 				await todoistApi.labels.add({ name: name, favorite: true });
 			}
 		}
-		// add labels
+
 		// add sections
+		const todoistSections = todoistApi.sections.get();
+		const todoistProjects = todoistApi.projects.get();
+		for (const project of todoistProjects) {
+			for (const name of contextNames) {
+				const section = todoistSections.find(s => s.name == name && s.project_id == project.id);
+				if (!section) {
+					await todoistApi.sections.add({ name: name, project_id: project.id });
+				}
+			}
+		}
 
 		// const somedayContextName = 'Someday';
 		// const nextContextName = 'Next';

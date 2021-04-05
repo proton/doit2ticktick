@@ -36,7 +36,7 @@ function main() {
 			return lib.auth(promptResult)
 				.then(() => lib);
 		})
-		.then((lib) => GrabberLogic.chooseTaskAndGo(lib, argv))
+		.then((lib) => GrabberLogic.sync(lib, argv))
 		.then(() => console.log('done'))
 		.catch(console.error)
 		.done();

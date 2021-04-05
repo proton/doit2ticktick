@@ -31,13 +31,19 @@ export default class DoItLib {
 	getProjects() {
 		//noinspection JSUnresolvedVariable
 		return this.getResources()
-			.then((resources) => _(resources.projects).filter(p => !p.trashed && p.status !== 'inactive').map(p => [p.uuid, p.name]).fromPairs().value());
+			.then((resources) => _(resources.projects).filter(p => !p.trashed && p.status !== 'inactive').value()); //.map(p => [p.uuid, p.name]).fromPairs().value());
 	}
 
 	getBoxes() {
 		//noinspection JSUnresolvedVariable
 		return this.getResources()
 			.then((resources) => _.map(resources.boxes, box => box.type))
+	}
+
+	getContexts() {
+		//noinspection JSUnresolvedVariable
+		return this.getResources()
+			.then((resources) => resources.contexts)
 	}
 
 	plainGet(url) {

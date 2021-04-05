@@ -16,6 +16,7 @@ export default class GrabberLogic {
 		await this.syncProjects(lib, todoistApi);
 		await this.syncProjectNotes(lib, todoistApi);
 		await this.syncTags(lib, todoistApi);
+		await this.syncContexts(lib, todoistApi);
 		await this.syncBoxes(lib, todoistApi);
 		await this.syncTasks(lib, todoistApi);
 	}
@@ -82,6 +83,23 @@ export default class GrabberLogic {
 		await todoistApi.commit();
 	}
 
+	static async syncContexts(doitLib, todoistApi) {
+		await todoistApi.sync();
+
+		const doitContexts = await doitLib.getContexts();
+		let contexts = doitContexts.map(c => c.name);
+
+		const todoistLabels = todoistApi.labels.get();
+		for (const name of contexts) {
+			const label = todoistLabels.find(l => this.formatName(l.name) === this.formatName(name));
+			if (!label) {
+				await todoistApi.labels.add({ name: this.formatName(name) });
+			}
+		}
+
+		await todoistApi.commit();
+	}
+
 	static async syncBoxes(_doitLib, todoistApi) {
 		await todoistApi.sync();
 
@@ -122,9 +140,6 @@ export default class GrabberLogic {
 		const todoistProjects = todoistApi.projects.get();
 		const todoistTasks = todoistApi.items.get();
 		const todoistNotes = todoistApi.notes.get();
-
-		const resss = await doitLib.getResources();
-		console.log(resss);
 
 		for (const doitTask of doitTasks) {
 			// console.log(doitTask);

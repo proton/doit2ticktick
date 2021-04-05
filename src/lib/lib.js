@@ -40,6 +40,12 @@ export default class DoItLib {
 			.then((resources) => _.map(resources.boxes, box => box.type))
 	}
 
+	getContexts() {
+		//noinspection JSUnresolvedVariable
+		return this.getResources()
+			.then((resources) => resources.contexts)
+	}
+
 	plainGet(url) {
 		return Q()
 			.then(() => agent

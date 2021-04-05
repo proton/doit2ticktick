@@ -7,43 +7,19 @@ import naturalSort from 'javascript-natural-sort';
 const todoist = require('todoist').v8
 
 export default class GrabberLogic {
-	static async do(lib, argv) {
+	static async sync(lib, argv) {
 		const todoistApi = todoist(argv.todoistToken);
-		await this.createMissingProjects(lib, todoistApi);
-
-		// await todoistApi.sync();
-		// todoistApi.commit();
-
-
-		// getProjects
-		// save projects
-		// getAllTasks
-		// save tasks
-
-		// return Q()
-		// .then(() => {
-		// 	return lib.getProjects();
-		// })
-		// .then((projects) => {
-		// 	console.log(projects);
-		// 	return projects;
-		// })
-		// .then((projects) => {
-		// 	return [projects, lib.getAllTasks()];
-		// })
-		// .then(([projects, tasks]) => {
-		// 	// if (argv.output) {
-		// 	// 	//noinspection JSUnresolvedFunction
-		// 	// 	return fs.writeFile(argv.output, JSON.stringify(tasks, null, 4));
-		// 	// }
-		// 	console.log(projects);
-		// 	console.log(tasks);
-		// });
+		await this.syncProjects(lib, todoistApi);
+		await this.syncTasks(lib, todoistApi);
 	}
 
-	static async createMissingProjects(doitLib, todoistApi) {
+	static formatName(name) {
+		return name.replace(/[\(\)]/g, '_')
+	}
+
+	static async syncProjects(doitLib, todoistApi) {
 		const doitProjects = await doitLib.getProjects();
-		const doitProjectNames = Object.values(doitProjects);
+		const doitProjectNames = Object.values(doitProjects).map(this.formatName);
 		doitProjectNames.push('Inbox');
 		
 		await todoistApi.sync();
@@ -57,5 +33,14 @@ export default class GrabberLogic {
 			await todoistApi.projects.add({ name: name });
 		}
 		await todoistApi.commit();
+	}
+
+	static async syncTasks(doitLib, todoistApi) {
+		const doitProjects = await doitLib.getProjects();
+		// const doitProjectNames = Object.values(doitProjects);
+		// doitProjectNames.push('Inbox');
+
+		const doitTasks = await doitLib.getAllTasks();
+		// console.log(doitTasks);
 	}
 }

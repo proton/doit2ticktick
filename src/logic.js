@@ -148,6 +148,7 @@ export default class GrabberLogic {
 			if (!project) throw `project with name "${doitContext.name}" not found`;
 			projectMap[doitProject.uuid] = project.id;
 		}
+		const inboxProjectId = todoistProjects.find(p => p.name === "Inbox");
 
 		const contextMap = {};
 		for (const doitContext of doitContexts) {
@@ -169,15 +170,27 @@ export default class GrabberLogic {
 		for (const doitTask of doitTasks) {
 			console.log(doitTask);
 
-			// content
-			// project_id
+			const task = {};
+			task.content = doitTask.title;
+			task.project_id = projectMap[doitTask.project] || inboxProjectId;
 			// section_id
 			// parent_id
 			// order
 			// label_ids
-			// priority
+			task.priority = doitTask.priority + 1;
 			// due_date
 			// due_datetime
+			console.log(task);
+
+			// {
+			// 	attribute: 'noplan',
+			// 	all_day: true,
+			// 	start_at: 0,
+			// 	end_at: 0,
+			// 	context: 'f79e834c-39be-491c-870f-0f7fdcdf4081',
+			// 	tags: [ 'Gestalt' ],
+			// 	pos: 2247838059,
+			// }
 
 			// + note!!!
 		

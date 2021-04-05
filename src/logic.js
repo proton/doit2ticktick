@@ -15,6 +15,7 @@ export default class GrabberLogic {
 		const todoistApi = todoist(argv.todoistToken);
 		await this.syncProjects(lib, todoistApi);
 		await this.syncProjectNotes(lib, todoistApi);
+		await this.syncTags(lib, todoistApi);
 		await this.syncContexts(lib, todoistApi);
 		await this.syncTasks(lib, todoistApi);
 	}
@@ -63,6 +64,24 @@ export default class GrabberLogic {
 		await todoistApi.commit();
 	}
 
+	static async syncTags(doitLib, todoistApi) {
+		await todoistApi.sync();
+
+		const doitTasks = await doitLib.getAllTasks();
+		let tags = doitTasks.filter(t => t.tags).flatMap(t => t.tags);
+		tags = [...new Set(tags)];
+
+		const todoistLabels = todoistApi.labels.get();
+		for (const name of tags) {
+			const label = todoistLabels.find(l => this.formatName(l.name) === this.formatName(name));
+			if (!label) {
+				await todoistApi.labels.add({ name: this.formatName(name) });
+			}
+		}
+
+		await todoistApi.commit();
+	}
+
 	static async syncContexts(_doitLib, todoistApi) {
 		await todoistApi.sync();
 
@@ -104,7 +123,25 @@ export default class GrabberLogic {
 		const todoistTasks = todoistApi.items.get();
 		const todoistNotes = todoistApi.notes.get();
 
-		// console.log(doit=.length);
+		for (const doitTask of doitTasks) {
+			console.log(doitTask);
+		}
+		
+		// content
+		// project_id
+		// section_id
+		// parent_id
+		// order
+		// label_ids
+		// priority
+		// due_date
+		// due_datetime
+
+		// tags, context -> labels
+
+		// console.log(todoistTasks.length);
+		// const t = await todoistApi.items.add({ content: 'delete me plz' })
+		// console.log(t);
 
 		await todoistApi.commit();
 	}

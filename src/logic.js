@@ -142,25 +142,32 @@ export default class GrabberLogic {
 		const todoistNotes = todoistApi.notes.get();
 		const todoistLabels = todoistApi.labels.get();
 
-		// let projectMap = {};
+		const projectMap = {};
+		for (const doitProject of doitProjects) {
+			const project = todoistProjects.find(p => this.formatName(p.name) === this.formatName(doitProject.name));
+			if (!project) throw `project with name "${doitContext.name}" not found`;
+			projectMap[doitProject.uuid] = project.id;
+		}
+
 		const contextMap = {};
 		for (const doitContext of doitContexts) {
 			const label = todoistLabels.find(l => this.formatName(l.name) === this.formatName(doitContext.name));
-			if (!label) throw `label with name "${doitContext.name}" not found`
+			if (!label) throw `label with name "${doitContext.name}" not found`;
 			contextMap[doitContext.uuid] = label.id;
 		}
+
 		const tagsMap = {};
 		for (const doitTask of doitTasks) {
 			if (!doitTask.tags) continue;
 				for (const tag of doitTask.tags) {
 				const label = todoistLabels.find(l => this.formatName(l.name) === this.formatName(tag));
-				if (!label) throw `label with name "${tag}" not found`
-				tagsMa[tag] = label.id;
+				if (!label) throw `label with name "${tag}" not found`;
+				tagsMap[tag] = label.id;
 			}
 		}
 
 		for (const doitTask of doitTasks) {
-			// console.log(doitTask);
+			console.log(doitTask);
 
 			// content
 			// project_id

@@ -4,9 +4,9 @@ import moment from 'moment';
 import naturalSort from 'javascript-natural-sort';
 // const fs = require('fs-extra');
 
-const nextContextName = 'Next';
-const somedayContextName = 'Someday';
-const waitingContextName = 'Waiting';
+const nextBoxName = 'Next';
+const somedayBoxName = 'Someday';
+const waitingBoxName = 'Waiting';
 
 const todoist = require('todoist').v8
 
@@ -16,7 +16,7 @@ export default class GrabberLogic {
 		await this.syncProjects(lib, todoistApi);
 		await this.syncProjectNotes(lib, todoistApi);
 		await this.syncTags(lib, todoistApi);
-		await this.syncContexts(lib, todoistApi);
+		await this.syncBoxes(lib, todoistApi);
 		await this.syncTasks(lib, todoistApi);
 	}
 
@@ -82,14 +82,14 @@ export default class GrabberLogic {
 		await todoistApi.commit();
 	}
 
-	static async syncContexts(_doitLib, todoistApi) {
+	static async syncBoxes(_doitLib, todoistApi) {
 		await todoistApi.sync();
 
-		const contextNames = [nextContextName, somedayContextName, waitingContextName];
+		const boxNames = [nextBoxName, somedayBoxName, waitingBoxName];
 
 		// add labels
 		const todoistLabels = todoistApi.labels.get();
-		for (const name of contextNames) {
+		for (const name of boxNames) {
 			const label = todoistLabels.find(l => l.name.includes(name));
 			if (!label) {
 				await todoistApi.labels.add({ name: name, favorite: true });
@@ -100,7 +100,7 @@ export default class GrabberLogic {
 		const todoistSections = todoistApi.sections.get();
 		const todoistProjects = todoistApi.projects.get();
 		for (const project of todoistProjects) {
-			for (const name of contextNames) {
+			for (const name of boxNames) {
 				const section = todoistSections.find(s => s.name == name && s.project_id == project.id);
 				if (!section) {
 					await todoistApi.sections.add({ name: name, project_id: project.id });
@@ -123,8 +123,11 @@ export default class GrabberLogic {
 		const todoistTasks = todoistApi.items.get();
 		const todoistNotes = todoistApi.notes.get();
 
+		const resss = await doitLib.getResources();
+		console.log(resss);
+
 		for (const doitTask of doitTasks) {
-			console.log(doitTask);
+			// console.log(doitTask);
 		}
 		
 		// content

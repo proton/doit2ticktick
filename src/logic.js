@@ -41,7 +41,7 @@ export default class GrabberLogic {
 		await todoistApi.commit();
 	}
 
-	static async syncContexts(doitLib, todoistApi) {
+	static async syncContexts(_doitLib, todoistApi) {
 		await todoistApi.sync();
 
 		const contextNames = [nextContextName, somedayContextName, waitingContextName];
@@ -67,22 +67,24 @@ export default class GrabberLogic {
 			}
 		}
 
-		// const somedayContextName = 'Someday';
-		// const nextContextName = 'Next';
-		// const waitingContextName = 'Waiting';
-		// 1. get contexts
-		// 2. check missing
-		// 3. add missing
-
 		await todoistApi.commit();
 	}
 
 	static async syncTasks(doitLib, todoistApi) {
-		const doitProjects = await doitLib.getProjects();
-		// const doitProjectNames = Object.values(doitProjects);
-		// doitProjectNames.push('Inbox');
+		await todoistApi.sync();
 
-		const doitTasks = await doitLib.getAllTasks();
-		// console.log(doitTasks);
+		let projectMap = {};
+		const doitProjects = await doitLib.getProjects();
+		let doitTasks = await doitLib.getAllTasks();
+		doitTasks = doitTasks.filter(t => t.completed === 0 && t.archived === 0 && t.hidden === 0);
+		const todoistSections = todoistApi.sections.get();
+		const todoistProjects = todoistApi.projects.get();
+		const todoistTasks = todoistApi.items.get();
+		const todoistNotes = todoistApi.notes.get();
+
+		console.log(doitTasks);
+		console.log(doitTasks.length);
+
+		await todoistApi.commit();
 	}
 }

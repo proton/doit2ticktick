@@ -199,19 +199,46 @@ export default class GrabberLogic {
 					due.datetime = time_at.format('YYYY-MM-DDThh:mm:ssZ');
 					due.string = time_at.format('YYYY-MM-DD hh:mm:ss');
 				}
-				// {
-				//  repeater: { weekly: { days: [Array], cycle: 1 }, ends_on: 0, mode: 'weekly' },
-				// }
+				if (doitTask.repeater) {
+					if (doitTask.repeater.mode == 'yearly') {
+						due.string = 'every year'
+						// {
+						// 	yearly: { day_of_month: -1, month: 9, cycle: 1 },
+						// 	ends_on: 0,
+						// 	mode: 'yearly'
+						// }
+					}
+					if (doitTask.repeater.mode == 'monthly') {
+						due.string = 'every month'
+						// {
+						// 	monthly: { date: { day_of_month: 21 }, cycle: 1 },
+						// 	ends_on: 0,
+						// 	mode: 'monthly'
+						// }
+					}
+					if (doitTask.repeater.mode == 'weekly') {
+						due.string = 'every week'
+						// { weekly: { days: [ 5 ], cycle: 1 }, ends_on: 0, mode: 'weekly' }
+					}
+					if (doitTask.repeater.mode == 'daily') {
+						due.string = 'every day'
+						if (!doitTask.all_day) due.string += ` at ${time_at.format("h a")}`;
+					}
+					if (doitTask.repeater.ends_on)
+						const ends_on = moment.utc(doitTask.repeater.ends_on);
+						due.string += ` ending ${ends_on.format('YYYY-MM-DD')}`;
+				}
 				task.due = due;
 			}
 
 			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
 			if (!todoistTask) {
-				console.log(doitTask);
-				console.log(task);
 
 				// temporary skip tasks with repeater
 				if (!doitTask.repeater) continue;
+				if (doitTask.repeater) continue;
+				console.log(doitTask);
+				console.log(task);
 
 				todoistTask = await todoistApi.items.add(task);
 				console.log(todoistTask);

@@ -7,6 +7,13 @@ npm start -- --login=<your login> --password=<your password> --todoistToken=<you
 ```
 You can find your todoist token on this page: https://todoist.com/prefs/integrations
 
-## What's done
+## What's done:
 
-- 
+- Sync tasks wihout repeating/deadlines
+
+## What's doesn't work (yet):
+
+- Repeated tasks
+- Deadlines
+- Tags
+- Contexts

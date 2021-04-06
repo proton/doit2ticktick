@@ -171,7 +171,7 @@ export default class GrabberLogic {
 			console.log(doitTask);
 
 			const task = {};
-			task.content = doitTask.title;
+			task.content = doitTask.title.replace(/\s+/g, ' ');
 			task.project_id = projectMap[doitTask.project] || inboxProjectId;
 			task.label_ids = [];
 			let boxName;
@@ -199,7 +199,6 @@ export default class GrabberLogic {
 			console.log(task);
 
 			// {
-			// 	attribute: 'noplan',
 			// 	all_day: true,
 			// 	start_at: 0,
 			// 	end_at: 0,

@@ -217,14 +217,12 @@ export default class GrabberLogic {
 				console.log(todoistTask);
 			}
 
-			// if (doitTask.notes) {
-			// 	let todoistNote = todoistNotes.find(n => n.task_id == doitTask.id)
-			// 	if (!todoistNote) {
-			// 		console.log(doitTask)
-			// 		console.log({ task_id: doitTask.id, content: doitTask.notes.replace(/\s+/g, ' ')})
-			// 		todoistNote = await todoistApi.notes.add({ task_id: doitTask.id, content: doitTask.notes.replace(/\s+/g, ' ')})
-			// 	} 
-			// }
+			if (doitTask.notes) {
+				let todoistNote = todoistNotes.find(n => n.task_id == doitTask.id)
+				if (!todoistNote) {
+					todoistNote = await todoistApi.notes.add({ item_id: todoistTask.id, content: doitTask.notes.replace(/\s+/g, ' ')})
+				} 
+			}
 			// repeats
 		}
 

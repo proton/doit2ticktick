@@ -191,16 +191,18 @@ export default class GrabberLogic {
 			task.priority = doitTask.priority + 1;
 
 			if (doitTask.start_at || doitTask.end_at) {
-				// due_date
-				// due_datetime
-	
+				const time_at = moment.utc(doitTask.start_at || doitTask.end_at);
+				const due = {};
+				due.date = time_at.format('YYYY-MM-DD');
+				due.string = time_at.format('YYYY-MM-DD');
+				if (!doitTask.all_day) {
+					due.datetime = time_at.format('YYYY-MM-DDThh:mm:ssZ');
+					due.string = time_at.format('YYYY-MM-DD hh:mm:ss');
+				}
 				// {
-				// 	all_day: true,
-				// 	start_at: 0,
-				// 	end_at: 0,
 				//  repeater: { weekly: { days: [Array], cycle: 1 }, ends_on: 0, mode: 'weekly' },
-        //  notes: 'https://nuuz.io/tech',
 				// }
+				task.due = due;
 			}
 
 			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
@@ -208,10 +210,8 @@ export default class GrabberLogic {
 				console.log(doitTask);
 				console.log(task);
 
-				// temporary skip tasks with dates
-				if (!doitTask.all_day) continue;
-				if (doitTask.start_at) continue;
-				if (doitTask.end_at) continue;
+				// temporary skip tasks with repeater
+				if (!doitTask.repeater) continue;
 
 				todoistTask = await todoistApi.items.add(task);
 				console.log(todoistTask);
@@ -223,7 +223,6 @@ export default class GrabberLogic {
 					todoistNote = await todoistApi.notes.add({ item_id: todoistTask.id, content: doitTask.notes.replace(/\s+/g, ' ')})
 				} 
 			}
-			// repeats
 		}
 
 		await todoistApi.commit();

@@ -177,8 +177,8 @@ export default class GrabberLogic {
 			else if (doitTask.attribute == 'waiting') boxName = waitingBoxName;
 			else if (doitTask.attribute == 'noplan') boxName = somedayBoxName;
 			if (boxName) {
-				task.section_id = todoistSections.find(s => s.name == boxName && s.project_id == task.project_id);
-				const label_id = todoistLabels.find(l => l.name.includes(boxName));
+				task.section_id = todoistSections.find(s => s.name == boxName && s.project_id == task.project_id).id;
+				const label_id = todoistLabels.find(l => l.name.includes(boxName)).id;
 				task.label_ids = [label_id];
 			}
 			if (doitTask.context) {

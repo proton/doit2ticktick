@@ -9,11 +9,9 @@ You can find your todoist token on this page: https://todoist.com/prefs/integrat
 
 ## What's done:
 
-- Sync tasks wihout repeating/deadlines
+- Sync tasks without repeating/deadlines
 
 ## What's doesn't work (yet):
 
 - Repeated tasks
 - Deadlines
-- Tags
-- Contexts

@@ -171,7 +171,7 @@ export default class GrabberLogic {
 			const task = {};
 			task.content = doitTask.title.replace(/\s+/g, ' ');
 			task.project_id = projectMap[doitTask.project] || inboxProjectId;
-			task.label_ids = [];
+			task.labels = [];
 			let boxName;
 			if (doitTask.attribute == 'next') boxName = nextBoxName;
 			else if (doitTask.attribute == 'waiting') boxName = waitingBoxName;
@@ -179,15 +179,15 @@ export default class GrabberLogic {
 			if (boxName) {
 				task.section_id = todoistSections.find(s => s.name == boxName && s.project_id == task.project_id).id;
 				const label_id = todoistLabels.find(l => l.name.includes(boxName)).id;
-				task.label_ids = [label_id];
+				task.labels = [label_id];
 			}
 			if (doitTask.context) {
 				const label_id = contextMap[doitTask.context];
-				task.label_ids.push(label_id);
+				task.labels.push(label_id);
 			}
 			if (doitTask.tags) {
 				const label_ids = doitTask.tags.map(t => tagsMap[t]);
-				task.label_ids = task.label_ids.concat(label_ids);
+				task.labels = task.labels.concat(label_ids);
 			}
 			task.priority = doitTask.priority + 1;
 
@@ -202,6 +202,7 @@ export default class GrabberLogic {
 				console.log(doitTask);
 				console.log(task);
 				todoistTask = await todoistApi.items.add(task);
+				console.log(todoistTask);
 			}
 
 			// due_date

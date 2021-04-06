@@ -193,14 +193,14 @@ export default class GrabberLogic {
 
 			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
 			if(!todoistTask) {
+				console.log(doitTask);
+				console.log(task);
+				
 				// temporary skip tasks with dates
 				if (!doitTask.all_day) continue;
 				if (doitTask.start_at) continue;
 				if (doitTask.end_at) continue;
 
-
-				console.log(doitTask);
-				console.log(task);
 				todoistTask = await todoistApi.items.add(task);
 				console.log(todoistTask);
 			}

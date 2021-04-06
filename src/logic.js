@@ -56,8 +56,7 @@ export default class GrabberLogic {
 			if (todoistProject && doitProject.notes) {
 				const todoistProjectNote = todoistProjectNotes.find(n => n.project_id == todoistProject.id)
 				if (!todoistProjectNote) {
-					// Error: An invalid sync command was sent
-					// await todoistApi.projectNotes.add({ content: doitProject.notes.replace(/\s+/g, ' '), project_id: todoistProject.id });
+					await todoistApi.notes.add({ content: doitProject.notes.replace(/\s+/g, ' '), project_id: todoistProject.id });
 				}
 			}
 		}
@@ -205,7 +204,7 @@ export default class GrabberLogic {
 			}
 
 			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
-			if(!todoistTask) {
+			if (!todoistTask) {
 				console.log(doitTask);
 				console.log(task);
 

@@ -15,7 +15,6 @@ You can find your todoist token on this page: https://todoist.com/prefs/integrat
 
 ## What's doesn't work (yet):
 
-- Project descriptions
 - Repeated tasks
 - Deadlines
 - Reminders

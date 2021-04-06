@@ -168,8 +168,6 @@ export default class GrabberLogic {
 		}
 
 		for (const doitTask of doitTasks) {
-			console.log(doitTask);
-
 			const task = {};
 			task.content = doitTask.title.replace(/\s+/g, ' ');
 			task.project_id = projectMap[doitTask.project] || inboxProjectId;
@@ -193,10 +191,21 @@ export default class GrabberLogic {
 			}
 			task.priority = doitTask.priority + 1;
 
+			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
+			if(!todoistTask) {
+				// temporary skip tasks with dates
+				if (!doitTask.all_day) continue;
+				if (doitTask.start_at) continue;
+				if (doitTask.end_at) continue;
+
+
+				console.log(doitTask);
+				console.log(task);
+				todoistTask = await todoistApi.items.add(task);
+			}
+
 			// due_date
 			// due_datetime
-
-			console.log(task);
 
 			// {
 			// 	all_day: true,

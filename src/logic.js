@@ -191,7 +191,11 @@ export default class GrabberLogic {
 			task.priority = doitTask.priority + 1;
 
 			if (doitTask.start_at || doitTask.end_at) {
-				const time_at = moment.utc(doitTask.start_at || doitTask.end_at);
+				const today = moment().startOf('day');
+				let time_at = moment.utc(doitTask.start_at || doitTask.end_at);
+				while (doitTask.repeater && time_at < today) {
+					time_at.add(1, 'year')
+				}
 				const due = {};
 				due.date = time_at.format('YYYY-MM-DD');
 				due.string = time_at.format('YYYY-MM-DD');
@@ -201,47 +205,43 @@ export default class GrabberLogic {
 				}
 				if (doitTask.repeater) {
 					if (doitTask.repeater.mode == 'yearly') {
-						due.string = 'every year'
-						// {
-						// 	yearly: { day_of_month: -1, month: 9, cycle: 1 },
-						// 	ends_on: 0,
-						// 	mode: 'yearly'
-						// }
+						due.string = `every year starting ${due.string}`
 					}
 					if (doitTask.repeater.mode == 'monthly') {
-						due.string = 'every month'
-						// {
-						// 	monthly: { date: { day_of_month: 21 }, cycle: 1 },
-						// 	ends_on: 0,
-						// 	mode: 'monthly'
-						// }
+						due.string = `every month starting ${due.string}`
 					}
 					if (doitTask.repeater.mode == 'weekly') {
-						due.string = 'every week'
-						// { weekly: { days: [ 5 ], cycle: 1 }, ends_on: 0, mode: 'weekly' }
+						const weekdays = ['', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+						if (doitTask.repeater.days) {
+							weekdaysString = doitTask.repeater.days.map(d => weekdays[d]).join(', ')
+							due.string = `every ${weekdaysString}`
+							if (!doitTask.all_day) due.string += ` at ${time_at.format("h a")}`;
+						} else {
+							due.string = `every week starting ${due.string}`
+						}
 					}
 					if (doitTask.repeater.mode == 'daily') {
 						due.string = 'every day'
 						if (!doitTask.all_day) due.string += ` at ${time_at.format("h a")}`;
 					}
-					if (doitTask.repeater.ends_on)
+					if (doitTask.repeater.ends_on) {
 						const ends_on = moment.utc(doitTask.repeater.ends_on);
 						due.string += ` ending ${ends_on.format('YYYY-MM-DD')}`;
+					}
 				}
 				task.due = due;
 			}
 
 			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
 			if (!todoistTask) {
-
 				// temporary skip tasks with repeater
-				if (!doitTask.repeater) continue;
-				if (doitTask.repeater) continue;
-				console.log(doitTask);
-				console.log(task);
+				// if (!doitTask.repeater) continue;
+				// if (doitTask.repeater) continue;
+				// console.log(doitTask);
+				// console.log(task);
 
 				todoistTask = await todoistApi.items.add(task);
-				console.log(todoistTask);
+				// console.log(todoistTask);
 			}
 
 			if (doitTask.notes) {

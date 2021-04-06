@@ -191,11 +191,24 @@ export default class GrabberLogic {
 			}
 			task.priority = doitTask.priority + 1;
 
+			if (doitTask.start_at || doitTask.end_at) {
+				// due_date
+				// due_datetime
+	
+				// {
+				// 	all_day: true,
+				// 	start_at: 0,
+				// 	end_at: 0,
+				//  repeater: { weekly: { days: [Array], cycle: 1 }, ends_on: 0, mode: 'weekly' },
+        //  notes: 'https://nuuz.io/tech',
+				// }
+			}
+
 			let todoistTask = todoistTasks.find(t => t.content == task.content && t.project_id == task.project_id);
 			if(!todoistTask) {
 				console.log(doitTask);
 				console.log(task);
-				
+
 				// temporary skip tasks with dates
 				if (!doitTask.all_day) continue;
 				if (doitTask.start_at) continue;
@@ -205,16 +218,15 @@ export default class GrabberLogic {
 				console.log(todoistTask);
 			}
 
-			// due_date
-			// due_datetime
-
-			// {
-			// 	all_day: true,
-			// 	start_at: 0,
-			// 	end_at: 0,
+			// if (doitTask.notes) {
+			// 	let todoistNote = todoistNotes.find(n => n.task_id == doitTask.id)
+			// 	if (!todoistNote) {
+			// 		console.log(doitTask)
+			// 		console.log({ task_id: doitTask.id, content: doitTask.notes.replace(/\s+/g, ' ')})
+			// 		todoistNote = await todoistApi.notes.add({ task_id: doitTask.id, content: doitTask.notes.replace(/\s+/g, ' ')})
+			// 	} 
 			// }
-
-			// + note!!!
+			// repeats
 		}
 
 		await todoistApi.commit();

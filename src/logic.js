@@ -1,8 +1,6 @@
 import Q from 'q';
 const _ = require('lodash');
 import moment from 'moment';
-import naturalSort from 'javascript-natural-sort';
-// const fs = require('fs-extra');
 
 const nextBoxName = 'Next';
 const somedayBoxName = 'Someday';

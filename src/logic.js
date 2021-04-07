@@ -203,7 +203,7 @@ export default class GrabberLogic {
 				}
 				if (doitTask.repeater) {
 					if (doitTask.repeater.mode == 'yearly') {
-						due.string = `every year starting ${due.string}`
+						due.string = `every ${time_at.format('MMM Do')}`;
 					}
 					if (doitTask.repeater.mode == 'monthly') {
 						due.string = `every month starting ${due.string}`
@@ -213,14 +213,15 @@ export default class GrabberLogic {
 						if (doitTask.repeater.days) {
 							weekdaysString = doitTask.repeater.days.map(d => weekdays[d]).join(', ')
 							due.string = `every ${weekdaysString}`
-							if (!doitTask.all_day) due.string += ` at ${time_at.format("h a")}`;
 						} else {
 							due.string = `every week starting ${due.string}`
 						}
 					}
 					if (doitTask.repeater.mode == 'daily') {
 						due.string = 'every day'
-						if (!doitTask.all_day) due.string += ` at ${time_at.format("h a")}`;
+					}
+					if (!doitTask.all_day) {
+						due.string += ` at ${time_at.format("h a")}`;
 					}
 					if (doitTask.repeater.ends_on) {
 						const ends_on = moment.utc(doitTask.repeater.ends_on);

@@ -1,5 +1,5 @@
-# Doit.im to Todoist converter
-This is a tool for exporting all your tasks from a popular GTD-compliant todo service doit.im to Todoist.
+# Doit.im to Ticktick converter
+This is a tool for exporting all your tasks from a popular GTD-compliant todo service doit.im to ticktick.com.
 
 ## Usage:
 ```
@@ -9,10 +9,8 @@ You can find your todoist token on this page: https://todoist.com/prefs/integrat
 
 ## What's done:
 
-- Sync projects
-- Sync tags/contexts (as Todoist's labels)
-- Sync tasks
+- Nothing
 
 ## What's doesn't work (yet):
 
-- Reminders
+- 

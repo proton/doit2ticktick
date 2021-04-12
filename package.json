@@ -19,7 +19,7 @@
     "q": "^1.4.1",
     "superagent": "^2.3.0",
     "superagent-promise": "^1.1.0",
-    "todoist": "^0.4.0",
+    "ticktick-wrapper": "^0.2.0",
     "yargs": "^6.0.0"
   },
   "devDependencies": {},

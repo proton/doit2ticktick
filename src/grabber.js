@@ -10,27 +10,7 @@ import GrabberLogic from './logic';
 function main() {
 	return Q()
 		.then(() => {
-			if (argv.login && argv.password)
-				return { login: argv.login, password: argv.password };
-			//noinspection JSUnresolvedFunction
-			return Q.fcall(prompt.start)
-				.then(function askForCredentials() {
-					const loginSchema = {
-						properties: {
-							login: {
-								message: 'doit.im login:',
-								required: true,
-							},
-							password: {
-								message: 'password:',
-								hidden: true,
-								required: true,
-							},
-						},
-					};
-					//noinspection JSUnresolvedFunction
-					return Q.nbind(prompt.get, prompt)(loginSchema);
-				});
+			return { login: argv.doitLogin, password: argv.doitPassword };
 		})
 		.then(function tryAuthenticate(promptResult) {
 			return lib.auth(promptResult)

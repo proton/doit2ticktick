@@ -3,14 +3,13 @@ This is a tool for exporting all your tasks from a popular GTD-compliant todo se
 
 ## Usage:
 ```
-npm start -- --login=<your login> --password=<your password> --todoistToken=<your todoist token>
+npm start -- --doitLogin=<your doit.im login> --doitPassword=<your doit.im password> --ticktickLogin=<your ticktick.com login> --ticktickPassword=<your ticktick.com password>
 ```
-You can find your todoist token on this page: https://todoist.com/prefs/integrations
 
 ## What's done:
 
-- Nothing
+- Pushes all doit.im tasks to ticktick Inbox
 
 ## What's doesn't work (yet):
 
-- 
+- TODO:
